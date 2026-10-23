@@ -1,14 +1,12 @@
-#Docker compose
-#Subir todo a git hub
 services:
   postgres:
     image: postgres:16
     container_name: erp-postgres
 
     environment:
-      POSTGRES_DB: ventas_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     ports:
       - "5432:5432"
@@ -18,7 +16,7 @@ services:
 
   backend:
     build:
-      context: ../Ventas-Backend
+      context: ../Compras_Backend
 
     container_name: erp-backend
 
@@ -29,16 +27,16 @@ services:
       - postgres
 
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ventas_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
-      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SERVER_PORT: ${SERVER_PORT}
 
   frontend:
     build:
-      context: ../Ventas-Frontend
+      context: ../Compras_Frontend-Angular
 
-    container_name: erp-frontend
+    container_name: erp-frontend-angular
 
     ports:
       - "4200:80"
